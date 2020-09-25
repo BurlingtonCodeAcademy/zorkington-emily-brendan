@@ -12,17 +12,32 @@ function ask(questionText) {
 start();
 //Welcome message/intro
 async function start() {
-  const welcomeMessage = `133 Bank St.
-  Walking towards the lake, you pass friendly faces standing outside of Alf's diner on the left. 2:50 PM. Your shift starts at 3:00. 
-  Your stomach has butterflies as you realize you're not as early as you planned on. 
- 'Last first day of a restaurant job' you say to yourself, as you cross St.Paul's headed towards One Rock. You see your friend .... 
- running up St. Pauls flagging you down`;
+  const welcomeMessage = `Welcome to your first day of work, there are a few things to remember to keep you caught up.
+    To talk to a person, please type, talk to 'individuals-name'.
+    To take a item, please type, pick up 'item-name'. To eat an item, please type eat the 'item-name'.
+    133 Bank St.
+    \n Walking towards the lake, you pass friendly faces standing outside of Alf's diner on the left. 2:50 PM. Your shift starts at 3:00. 
+    Your stomach has butterflies as you realize you're not as early as you planned on. 
+   'Last first day of a restaurant job' you say to yourself, as you cross St.Paul's headed towards One Rock. You see your friend sam 
+   running up St. Pauls flagging you down.`
   let answer = await ask(welcomeMessage);
-  console.log('Now write your code to make this work!');
-  process.exit();
+  while (answer !== 'exit') {
+    answer = await ask('>_ ')
+    if (action === 'talk to' || 'speak to')
+      console.log(lookupPerson(placePersonItem).speak())
+    return start()
+    if (action === 'yes ok') {
+      console.log(lookUpPerson(placePersonItem).speak())
+      console.log('Congratulations, you went for a hike and missed your first day.')
+      // await ask(`Great!', 'Let's meet at my apartment in half an hour.`)
+      // console.log('')
+    } if (action === 'no, sorry') {
+      console.log(lookUpPerson(placePersonItem).speak())
+
+    }
+  }
 }
-
-
+start()
 
 function itemAction(takeable, item) {
   let validItems = ['sign', 'menu', 'apron', 'cashTip', 'crispyFries', 'cleanPints', 'martinis', 'halfEatenWings', 'fiddlehead', 'key']
@@ -35,7 +50,7 @@ function itemAction(takeable, item) {
   } if (item === 'cleanPints' || item === 'martinis') {
     return [takeable, item]
   } if (item === 'fiddlehead' || item === 'key')
-    return "congratulations"
+    return "Congratulations, well deserved!"
 
 }
 
@@ -49,6 +64,10 @@ class Item {
     this.eat = eat
   }
 
+  //speak, take , read, eat functions
+  speak() {
+    return `I am ${this.person} and I ${this.position}. ${this.saying}`
+  }
   take() {
     if (this.takeable) {
       inventory.push(this.name)
@@ -56,81 +75,67 @@ class Item {
       return 'Sorry, cannot be taken'
     } if (this.description === 'cashTip') {
       throw ('Manager comes up from behind and confronts you, asks you to leave the building, obviously very dissapointed.')
-
-    }}
-
-    eat() {
-      if (this.eat) {
-        inventory.push(this.eat)
-        status.pop(this.eat)
-        return 'that was delicious'
-      }
     }
+  }
 
-
-    read() {
-      if (this.description === 'sign') {
-        console.log('One Rock- Modern asian bistro with a Vermont touch.')
-      } else {
-        if (this.description === 'menu') {
-          console.log(`Small: Scallion Fritters with Napa Slaw, Blistered Green beans with Maple Soy Glaze. 
+  eat() {
+    if (this.eat) {
+      inventory.push(this.eat)
+      status.pop(this.eat)
+      return `${this.description}, hit the spot`
+    }
+  }
+  read() {
+    if (this.description) {
+      return ``
+    }
+  } else {
+  if (this.description === 'menu') {
+    console.log(`Small: Scallion Fritters with Napa Slaw, Blistered Green beans with Maple Soy Glaze. 
         Dinner: One Pot Local Chicken w/ Lacinto Kale or Neil Farm Sirloin Tips w/ Broccolini  `)
-        }}
-   
+  }
+}
+  }
+}
+//-------------all items here
+//-------------readables
+let sign = new Item("Sign", "Red clay plaque, you read", false, false)
+let menu = new Item("Menu", "Standard thick print paper, you read", true, false)
+//-------------takeable
+let apron = new Item("Apron", "Normal black apron you're given by the Manager, has a few stains", "You take and put on.", true, false)
+let cleanPints = new Item("Clean pint glasses", "Full rack of clean glasses, you hear the bartender asking loudly for them over the music in the kitchen, you take them over.", true, false)
+let key = new Item("smallkey", "Peyton hands you a key after you bring him the clean pint glasses", "says welcome to the team", true, false)
+//--------------not takeable
+let cashTip = new Item("Large-tip", "You find a $175 tip on one of the large-family tables, taking some off the top could really help with rent...", "you don\'t see any staff nearby. ", false, false,)
+//-------------eatables
+let fries = new Item("Crispy Fries", " Delicous hot and crispy sweet-potato fries, you eat some", true, true)
+let halfEatenWings = new Item("Half-eaten Wings", "Four chicken wings on the edge of the pass, obviously for staff.", true, true)
+//-------------takeable only
+//-------------drinkables
+let fiddlehead = new Item("Fiddlehead beer", "Cold refreshing shift beer, obviously you enjoy it.", true, true)
+let martinis = new Item("martinis", "Three dirty martinis and one classic, need to be brought to their patrons, you take them to the dining room.", true, false)
 
-let sign = new Item(
-    "Sign", false, "Red clay plaque, you read", false,
-
-  )
-let menu = new Item(
-  "Menu", true, "Standard thick print paper, you read", false,
-
-)
-//action wearable/takeable
-let apron = new Item(
-  "Apron", true, "Normal black apron you're given by the Manager, has a few stains",
-  "You take and put on.", false,
-)
-
-//Take tip or don't take tip 
-let cashTip = new Item(
-  "Large-tip", true,
-  "You find a $175 tip on one of the large-family tables, taking some off the top could really help with rent...",
-  "you don\'t see any staff nearby. ", false,
-)
-
-//action eat
-let crispyFries = new Item(
-  "Crispy Fries", true,
-  " Delicous hot and crispy sweet-potato fries, you eat some", true
-)
-let halfEatenWings = new Item(
-  "Half-eaten Wings", true,
-  "Four chicken wings on the edge of the pass, obviously for staff.", true
-)
-
-//take/dont take
-let cleanPints = new Item(
-  "Clean pint glasses", true,
-  "Full rack of clean glasses, you hear the bartender asking loudly for them over the music in the kitchen, you take them over.", false
-)
-let martinis = new Item(
-  "martinis", true,
-  "Three dirty martinis and one classic, need to be brought to their patrons, you take them to the dining room.", false
-)
-let key = new Item(
-  "smallkey", true,
-  `Peyton hands you a key after you bring him the clean pint glasses, says "welcome to the team"`, false
-)
-let fiddlehead = new Item(
-  "Fiddlehead beer", true,
-  "Cold refreshing shift beer, obviously you enjoy it. ", true
-)
 
 let playerInventory = []
 let inventoryCount = 0
 let gameInventory = ['sign', 'menu', 'apron', 'largeCashTip', 'crsipyFries', 'cleanPints', 'martinis', 'fiddlhead']
 let status = ['hungry', 'jittery/nervous', 'tired', 'excited']
+
+
+if (action === 'takeable') {
+  console.log(itemTable[item].take())
+  return play()
+} else if (action === 'describe' || action === 'read') {
+  console.log(itemTable[item].read())
+  return play()
+} else if (action === 'eat' || action === 'drink') {
+  console.log(itemTable[item].eat())
+  return play()
+} else {
+  console.log('Sorry, cannot be performed')
+}
+
+
 
 let itemTable = {
   sign: sign,
@@ -198,5 +203,4 @@ let host = new Staff("Marla", "am ready for my lunch break", "What??? I'm workin
 let manager = new Staff("Justin, I'm a manager", "am going to ruin your life", "haha just kidding, but seriously watch your back")
 let chef = new Staff("Chef Fred", "am the brains behind the operation around here", "First day huh... good luck with this crew")
 let bartender = new Staff("Peyton", "have been here for far too long", "here is a key for the staff room")
-let friend = new Staff("Sam","friend","going on a hike", "think you should come", "") //--maybe modify this??
-    }
+let friend = new Staff("Sam", "friend", "going on a hike", "think you should come", "") //--maybe modify this??

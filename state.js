@@ -34,7 +34,7 @@ function changeRoom(nextRoom){
       if (canMoveTo[currentRoom.room].includes(roomLookup[nextRoom])){
             start = roomLookup[nextRoom]
       } else{
-            console.log("Settle down rookie, it's your first day on the job you can't go from the" + currentRoom + " to " + nextRoom + " try again")
+            console.log("Settle down rookie, it's your first day on the job you can't go from the " + currentRoom.room + " to " + nextRoom + " try again")
       }
 }
 
