@@ -25,20 +25,28 @@ async function start() {
 
 
 function itemAction(takeable, item) {
-  let validItems = ['sign', 'menu', 'apron', 'cashTip', 'crispyFries', 'cleanPints', 'martinis', 'halfEatenWings', 'fiddlehead']
-} if (validItems.includes(item)) {
-  if (item ==='sign' || item === 'menu')
-  return [takeable, item]
-} if (item === 'crispyFries' || item === 'halfEatenWings')
+  let validItems = ['sign', 'menu', 'apron', 'cashTip', 'crispyFries', 'cleanPints', 'martinis', 'halfEatenWings', 'fiddlehead', 'key']
+  if (validItems.includes(item)) {
+    if (item === 'sign' || item === 'menu' || item === 'apron')
+      return [takeable, item]
+  } if (item === 'crispyFries' || item === 'halfEatenWings') {
+    return [takeable, item, "  "]
+
+  } if (item === 'cleanPints' || item === 'martinis') {
+    return [takeable, item]
+  } if (item === 'fiddlehead' || item === 'key')
+    return "congratulations"
+
+}
 
 class Item {
   //Sign, menu, apron, tip, food items, glasses/work items
 
-  constructor(name, description, takeable,) {
+  constructor(name, description, takeable, eat) {
     this.name = name;
     this.description = description;
     this.takeable = takeable;
-
+    this.eat = eat
   }
 
   take() {
@@ -48,66 +56,75 @@ class Item {
       return 'Sorry, cannot be taken'
     } if (this.description === 'cashTip') {
       throw ('Manager comes up from behind and confronts you, asks you to leave the building, obviously very dissapointed.')
-    }
-  }
-}
 
-read() {
-  if (this.description === 'sign') {
-    console.log('One Rock- Modern asian bistro with a Vermont touch.')
-  } else {
-    if (this.description === 'menu') {
-      console.log(`Small: Scallion Fritters with Napa Slaw, Blistered Green beans with Maple Soy Glaze. 
+    }}
+
+    eat() {
+      if (this.eat) {
+        inventory.push(this.eat)
+        status.pop(this.eat)
+        return 'that was delicious'
+      }
+    }
+
+
+    read() {
+      if (this.description === 'sign') {
+        console.log('One Rock- Modern asian bistro with a Vermont touch.')
+      } else {
+        if (this.description === 'menu') {
+          console.log(`Small: Scallion Fritters with Napa Slaw, Blistered Green beans with Maple Soy Glaze. 
         Dinner: One Pot Local Chicken w/ Lacinto Kale or Neil Farm Sirloin Tips w/ Broccolini  `)
-
-    }
-  }
-}
-
+        }}
+   
 
 let sign = new Item(
-  "Sign", false, "Red clay plaque, you read"
+    "Sign", false, "Red clay plaque, you read", false,
 
-)
+  )
 let menu = new Item(
-  "Menu", true, "Standard thick print paper, you read"
+  "Menu", true, "Standard thick print paper, you read", false,
 
 )
 //action wearable/takeable
 let apron = new Item(
   "Apron", true, "Normal black apron you're given by the Manager, has a few stains",
-  "You take and put on."
+  "You take and put on.", false,
 )
 
 //Take tip or don't take tip 
 let cashTip = new Item(
   "Large-tip", true,
   "You find a $175 tip on one of the large-family tables, taking some off the top could really help with rent...",
-  "you don\'t see any staff nearby. "
+  "you don\'t see any staff nearby. ", false,
 )
 
 //action eat
 let crispyFries = new Item(
   "Crispy Fries", true,
-  " Delicous hot and crispy sweet-potato fries, you eat some"
+  " Delicous hot and crispy sweet-potato fries, you eat some", true
 )
 let halfEatenWings = new Item(
   "Half-eaten Wings", true,
-  "Four chicken wings on the edge of the pass, obviously for staff."
+  "Four chicken wings on the edge of the pass, obviously for staff.", true
 )
 
 //take/dont take
 let cleanPints = new Item(
   "Clean pint glasses", true,
-  "Full rack of clean glasses, you hear the bartender asking loudly for them over the music in the kitchen, you take them over."
+  "Full rack of clean glasses, you hear the bartender asking loudly for them over the music in the kitchen, you take them over.", false
 )
 let martinis = new Item(
   "martinis", true,
-  "Three dirty martinis and one classic, need to be brought to their patrons, you take them to the dining room."
+  "Three dirty martinis and one classic, need to be brought to their patrons, you take them to the dining room.", false
+)
+let key = new Item(
+  "smallkey", true,
+  `Peyton hands you a key after you bring him the clean pint glasses, says "welcome to the team"`, false
 )
 let fiddlehead = new Item(
-  "Fiddlehead beer", true, 
-  "Cold refreshing shift beer, obviously you enjoy it. "
+  "Fiddlehead beer", true,
+  "Cold refreshing shift beer, obviously you enjoy it. ", true
 )
 
 let playerInventory = []
@@ -123,6 +140,7 @@ let itemTable = {
   crispyFries: crispyFries,
   cleanPints: cleanPints,
   halfEatenWings: halfEatenWings,
+  key: key,
   fiddlhead: fiddlehead
 }
 
@@ -162,7 +180,7 @@ let bar = new Room("at the bar", "martinis in the well window", "a bartender try
 let staffRoom = Room.aloneRoom("in the staff room", "a shift drink, Fiddlehead to be exact, for you on the table and an exit sign")  // we are going to want this locked --through the state or order 
 
 
-
+//-- each staff member/ encounter described
 class Staff {
   constructor(person, position, saying) {
     this.person = person
@@ -180,4 +198,5 @@ let host = new Staff("Marla", "am ready for my lunch break", "What??? I'm workin
 let manager = new Staff("Justin, I'm a manager", "am going to ruin your life", "haha just kidding, but seriously watch your back")
 let chef = new Staff("Chef Fred", "am the brains behind the operation around here", "First day huh... good luck with this crew")
 let bartender = new Staff("Peyton", "have been here for far too long", "here is a key for the staff room")
-let friend = new Staff("going on a hike", "think you should come", "") //
+let friend = new Staff("Sam","friend","going on a hike", "think you should come", "") //--maybe modify this??
+    }
