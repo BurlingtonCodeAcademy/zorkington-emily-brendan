@@ -1,4 +1,4 @@
-//----------------------------ALL FUNCTIUON HERE
+//----------------------------ALL FUNCTIONS HERE
 const readline = require('readline');
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 function ask(questionText) {
@@ -77,7 +77,7 @@ let staffRoom = Room.aloneRoom("in the staff room", "a shift drink, Fiddlehead t
 let roomLookup = {
   work: work,
   lobby: lobby,
-  diningRoom: diningRoom,
+  "dining room": diningRoom,
   kitchen: kitchen,
   bar: bar,
   "staff room": staffRoom
@@ -172,19 +172,27 @@ async function play() {
   userAction = sanitizeInput(userAction)
   let inputArray = userAction.split(" ")
   let action = inputArray.slice(0, 2).join(" ")
-  let placePersonItem = inputArray.splice(2)
+  let placePersonItem = inputArray.splice(2).join(" ")
+ 
 
-
-
-  if (action === "talk to" || action === "speak to") {
+  if (action === "talk to" && placePersonItem === "host" || placePersonItem === "bartender" || placePersonItem === "manager" || placePersonItem === "chef" || placePersonItem === "sam" || placePersonItem === "pedestrian") {
     console.log(lookupPerson[placePersonItem].speak())
     return play()
+  }
+  else if (action ==="go to" && placePersonItem==="staff room"){
+    if (inventory.includes("key")) {
+      console.log(roomLookUp[placePersonItem].describe())
+      return play()
+    } else {
+      console.log("The door is locked! Find the key!")
+      return play()
+    }
   }
   else if (action === "yell at") {
     console.log("Hey don't yell at me!!")
     return play()
   }
-  else if (action === "go to") {
+  else if (action === "go to" && placePersonItem === "work" || placePersonItem === "lobby" || placePersonItem === "dining room" || placePersonItem === "kitchen" || placePersonItem === "bar") {
     console.log(roomLookup[placePersonItem].describe())
     return play()
   }
@@ -196,7 +204,7 @@ async function play() {
     console.log(itemTable[placePersonItem].eat())
     return play()
   }
-  else if (action === "take the") {
+  else if (action === "take the" ) {
     console.log(itemTable[placePersonItem].take())
     return play()
   }
@@ -205,7 +213,7 @@ async function play() {
     return play()
   }
   else {
-    console.log("Sorry I do not recognize that!!")
+    console.log("Sorry I do not recognize that!! Try again")
     return play()
   }
 }
