@@ -1,3 +1,5 @@
+
+
 let outside = {room: "outside"}
 let lobby = {room: "lobby"}
 let diningRoom = {room: "diningRoom"}
