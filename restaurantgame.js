@@ -109,6 +109,7 @@ class Item {
     }
     else if (this.name === 'tip') {
       return ('Manager comes up from behind and confronts you, "YOUR FIRED"')
+      process.exit()
     } else {
       return 'You already have the key!! First days huh?'
     }
@@ -131,13 +132,12 @@ class Item {
 
   }
 }
+
 //-------------readables
 //item|description|take|eat|drop|drink
 let sign = new Item("sign", "Red clay plaque, you read", false, false, true,)
 let menu = new Item("menu", "Standard thick print paper, you read", false, false, true,)
-//-------------takeable
 let key = new Item("key", "Peyton hands you a key after you bring him the clean pint glasses", "says welcome to the team", true, false, true,)
-//--------------not takeable
 let tip = new Item("tip", "You find a $175 tip on one of the large-family tables, taking some off the top could really help with rent...", "you don\'t see any staff nearby. ", false, false, true,)
 let fries = new Item("Fries", " Delicous hot and crispy sweet-potato fries, you eat some", false, true, false,)
 let fiddlehead = new Item("Fiddlehead", "Cold refreshing shift beer, obviously you enjoy it.", false, true, false,)
@@ -161,31 +161,10 @@ async function play() {
   let action = inputArray.slice(0, 2).join(" ")
   let placePersonItem = inputArray.splice(2).join(" ")
 
-  if (action === "talk to" && placePersonItem === "host") {
+  if (action === "talk to" && placePersonItem === "host" || placePersonItem === "bartender" || placePersonItem === "manager" || placePersonItem === "chef" || placePersonItem === "sam" || placePersonItem === "pedestrian") {
     console.log(lookupPerson[placePersonItem].speak())
     return play()
   }
-  if (action === "talk to" && placePersonItem === "bartender") {
-    console.log(lookupPerson[placePersonItem].speak())
-    return play()
-  }
-  if (action === "talk to" && placePersonItem === "manager") {
-    console.log(lookupPerson[placePersonItem].speak())
-    return play()
-  }
-  if (action === "talk to" && placePersonItem === "chef") {
-    console.log(lookupPerson[placePersonItem].speak())
-    return play()
-  }
-  if (action === "talk to" && placePersonItem === "sam") {
-    console.log(lookupPerson[placePersonItem].speak())
-    return play()
-  }
-  if (action === "talk to" && placePersonItem === "pedestrian") {
-    console.log(lookupPerson[placePersonItem].speak())
-    return play()
-  }
-
   else if (action === "go to" && placePersonItem === "staff room") {
     if (player.Inventory.includes("key")) {
       console.log(roomLookup[placePersonItem].describe())
@@ -199,33 +178,15 @@ async function play() {
     console.log("Hey don't yell at me!!")
     return play()
   }
-  else if (action === "go to" && placePersonItem === "work") {
+  else if (action === "go to" && placePersonItem === "work" || placePersonItem === "lobby" || placePersonItem === "dining room" || placePersonItem === "kitchen" || placePersonItem === "bar") {
     console.log(roomLookup[placePersonItem].describe())
     return play()
   }
-  else if (action === "go to" &&  placePersonItem === "lobby") {
-    console.log(roomLookup[placePersonItem].describe())
+  else if (action === "read the" && placePersonItem === 'menu' || placePersonItem === 'sign') {
+    console.log(itemTable[placePersonItem].read())
     return play()
   }
-  else if (action === "go to" &&  placePersonItem === "dining room") {
-    console.log(roomLookup[placePersonItem].describe())
-    return play()
-  }
-  else if (action === "go to" &&  placePersonItem === "kitchen") {
-    console.log(roomLookup[placePersonItem].describe())
-    return play()
-  }
-  else if (action === "go to" &&  placePersonItem === "bar") {
-    console.log(roomLookup[placePersonItem].describe())
-    return play()
-  }
-  
-
-  else if (action === "take the" && placePersonItem === 'sign') {
-    console.log(itemTable[placePersonItem].take())
-    return play()
-  }
-  else if (action === "take the" && placePersonItem === 'menu') {
+  else if (action === "take the" && placePersonItem === 'sign' ||  placePersonItem === 'menu' || placePersonItem === 'key' || placePersonItem === 'tip') {
     console.log(itemTable[placePersonItem].take())
     return play()
   }
@@ -239,27 +200,11 @@ async function play() {
     console.log("You don't have the key")
     return play()
   }
-  else if (action === "read the" && placePersonItem === 'sign') {
-    console.log(itemTable[placePersonItem].read())
-    return play()
-  }
-  else if (action === "read the" && placePersonItem === 'menu') {
-    console.log(itemTable[placePersonItem].read())
-    return play()
-  }
-  else if (action === "take the" && placePersonItem === 'key') {
-    console.log(itemTable[placePersonItem].take())
-    return play()
-  }
-  else if (action === "take the" && placePersonItem === 'tip') {
-    console.log(itemTable[placePersonItem].take())
-    return process.exit()
-  }
   else if (action === "eat the" && placePersonItem === "fries") {
     console.log(itemTable[placePersonItem].eat())
     return play()
   }
-  if (action === "drink the" && placePersonItem === 'fiddlehead') {
+  else if (action === "drink the" && placePersonItem === 'fiddlehead') {
     console.log(itemTable[placePersonItem].eat())
     return play()
   }
@@ -273,10 +218,6 @@ async function play() {
   }
   else if (action === "check my" && placePersonItem === "status") {
     console.log(player.status)
-    return play()
-  }
-  else if (action === "check the" && placePersonItem === "game") {
-    console.log(game)
     return play()
   }
   else if (action === "exit the" && placePersonItem === "game") {
