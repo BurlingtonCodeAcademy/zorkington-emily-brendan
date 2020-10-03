@@ -1,4 +1,4 @@
-
+// not implemented into the game
 
 let outside = {room: "outside"}
 let lobby = {room: "lobby"}
