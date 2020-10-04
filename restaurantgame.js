@@ -228,6 +228,5 @@ async function play() {
     return play()
   }
 }
-
 console.log("Welcome to your first day of work, there are a few things to remember to keep you caught up. \n\n To talk to a person, please type, talk to 'individuals-name'.\n To take an item, please type, take the 'item-name'.\n To eat an item, please type eat the 'item-name'.\n To drink an item, please type drink the 'item-name' \n To change rooms, please type go to 'room name'\nTo check your inventory, please type check my inventory\nTo check your status, please type check my status\n\n\n 133 Bank St. \n\n Walking towards the lake, you pass friendly faces standing outside of Alf's diner on the left.\n Damn! You've forgotten to eat lunch again, you're famished and need some food soon.\n 2:50 PM.\n Your shift starts at 3:00.\nYour stomach has butterflies as you realize you're not as early as you planned on.\n'Last first day of a restaurant job,' you say to yourself, as you cross St.Paul Street headed towards, 'One Rock.'\nAs you turn to go to work, you see your friend Sam running up St. Paul Street flagging you down.` ")
 play()
